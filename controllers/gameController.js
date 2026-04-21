@@ -35,7 +35,7 @@ function makeGuess(req, res) {
         gameState.gameOver = true;
 
         return res.json({
-            message: "Congratulations! You've guessed the movie!",
+            message: "Congratulations!\nYou've guessed the movie!",
             attempts: gameState.attempts
         });
     }
@@ -53,14 +53,13 @@ function makeGuess(req, res) {
         gameState.gameOver = true;
 
         return res.json({
-            message: `Game over! The correct answer was "${gameState.movie.title}"`,
+            message: `Game over!\nThe correct answer was "${gameState.movie.title}"`,
             attempts: 0,
             hint: null
         });
     }
 
     res.json({
-        message: "Wrong guess!",
         attempts: gameState.attempts,
         hint
     });

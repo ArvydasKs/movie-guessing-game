@@ -1,21 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Movie Guessing Game</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <h1>Movie Guessing Game</h1>
+  <div class="container">
+    <header class="header">
+      <h1 class="title">Movie Guessing Game</h1>
+      <p class="subtitle">Guess the movie from its synopsis. Good luck!</p>
+    </header>
 
-  <button onclick="startGame()">Start Game</button>
+    <main class="card">
+      <section class="left">
+        <h2 class="section-title">Synopsis</h2>
+        <p id="synopsis" class="synopsis">Click "Start Game" to begin.</p>
+      </section>
 
-  <p id="synopsis"></p>
-  <p id="attempts"></p>
+      <aside class="right">
+        <div class="status">
+          <div class="attempts" id="attemptsContainer">Attempts: <span id="attempts"></span></div>
+        </div>
 
-  <input id="guessInput" placeholder="Your guess..." />
-  <button onclick="makeGuess()">Guess</button>
+        <div class="controls">
+          <input id="guessInput" class="input" placeholder="Your guess..." disabled />
+          <button id="guessBtn" class="btn primary" onclick="makeGuess()" disabled>Guess</button>
+          <button class="btn secondary" onclick="startGame()">Start New Game</button>
+        </div>
 
-  <p id="result"></p>
+        <p id="result" class="result"></p>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      <small>Using TMDB API</small>
+    </footer>
+  </div>
 
   <script src="script.js"></script>
 </body>

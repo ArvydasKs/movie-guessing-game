@@ -4,21 +4,30 @@ const API_KEY = process.env.TMDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 
 async function getRandomMovie(usedMovies) {
-    const response = await axios.get(`${BASE_URL}/discover/movie`,
-        {
-            params: {
-                api_key: API_KEY,
-                sort_by: "popularity.desc",
-                vote_count_gte: 1000,
-                with_original_language: "en",
 
-                "primary_release_date.gte": "1970-01-01",
-                "primary_release_date.lte": "2026-12-31",
+    const eras = [
+        { gte: '1950-01-01', lte: '1969-12-31' },
+        { gte: '1970-01-01', lte: '1989-12-31' },
+        { gte: '1990-01-01', lte: '2009-12-31' },
+        { gte: '2010-01-01', lte: '2019-12-31' },
+        { gte: '2020-01-01', lte: '2026-12-31' }
+    ];
 
-                page: Math.floor(Math.random() * 10) + 1
-            }
+    const chosen = eras[Math.floor(Math.random() * eras.length)];
+
+    const response = await axios.get(`${BASE_URL}/discover/movie`, {
+        params: {
+            api_key: API_KEY,
+            sort_by: "popularity.desc",
+            vote_count_gte: 300,
+            with_original_language: "en",
+
+            "primary_release_date.gte": chosen.gte,
+            "primary_release_date.lte": chosen.lte,
+
+            page: Math.floor(Math.random() * 10) + 1
         }
-    );
+    });
 
     const movies = response.data.results;
     const availableMovies = movies.filter(m => !usedMovies.includes(m.id));
