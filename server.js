@@ -1,3 +1,5 @@
+const cookieParser = require('cookie-parser');
+
 const express = require('express');
 const app = express();
 const port = 3000;
@@ -5,6 +7,7 @@ const port = 3000;
 require('dotenv').config();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.static("public"));
 
 const gameRoutes = require('./routes/gameRoutes');

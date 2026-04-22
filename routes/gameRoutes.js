@@ -18,4 +18,18 @@ router.get('/tmdb/search', async (req, res) => {
 	}
 });
 
+router.get('/stats', (req, res) => {
+	const raw = req.cookies && req.cookies.stats;
+	let stats = { wins : 0, losses : 0};
+	try { if (raw) stats = JSON.parse(raw); } catch (e) {}
+	res.json(stats);
+});
+
+router.delete('/stats', (req, res) => {
+    const stats = { wins: 0, losses: 0 };
+    // Set the stats cookie back to zeros (mirror startGame cookie options)
+    res.cookie('stats', JSON.stringify(stats), { httpOnly: true, maxAge: 10*365*24*60*60*1000 });
+    res.json(stats);
+});
+
 module.exports = router;

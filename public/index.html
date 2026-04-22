@@ -23,6 +23,7 @@
       <aside class="right">
         <div class="status">
           <div class="attempts" id="attemptsContainer">Attempts: <span id="attempts"></span></div>
+          <div id="stats" style="font-weight:600">Wins: 0 - Losses: 0</div>
         </div>
 
         <div class="controls">
@@ -31,7 +32,7 @@
             <div id="suggestions" class="suggestions hidden" aria-hidden="true"></div>
           </div>
           <button id="guessBtn" class="btn primary" onclick="makeGuess()" disabled>Guess</button>
-          <button class="btn secondary" onclick="startGame()">Start New Game</button>
+          <button class="btn secondary start" onclick="startGame()">Start New Game</button>
         </div>
 
         <p id="result" class="result"></p>
@@ -44,5 +45,6 @@
   </div>
 
   <script src="script.js"></script>
+  <button id="resetProgress" class="btn tertiary reset-btn" title="Reset wins and losses">Reset Progress</button>
 </body>
 </html>

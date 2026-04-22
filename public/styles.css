@@ -24,8 +24,9 @@ body{
 .right{flex:1;display:flex;flex-direction:column;gap:12px}
 .section-title{margin:0 0 8px 0;font-size:16px;color:#111827}
 .synopsis{margin:0;color:#374151;line-height:1.5}
-.status{display:flex;justify-content:flex-end}
+.status{display:flex;justify-content:space-between;gap:12px;align-items:center;width:100%}
 .attempts{background:#f3f4f6;padding:6px 10px;border-radius:8px;color:#111827;font-weight:600}
+.status #stats{background:#f3f4f6;padding:6px 10px;border-radius:8px;color:#111827;font-weight:600}
 .controls{display:flex;flex-direction:column;gap:8px}
 .controls .input,
 .controls .btn{
@@ -48,7 +49,20 @@ body{
 .input:disabled{background:#f3f4f6;color:#9ca3af}
 .result{min-height:48px;background:#f8fafc;padding:10px;border-radius:8px;color:#0b1220;white-space:pre-line}
 .hidden{display:none}
+.invisible{visibility:hidden}
 .footer{text-align:center;margin-top:12px;color:#cbd5e1}
+
+.reset-btn{position:fixed;right:20px;bottom:20px;z-index:1200;padding:10px 12px;border-radius:8px}
+.btn.tertiary{background:#fff;color:#1f2937;border:1px solid #e5e7eb}
+.btn.tertiary:hover{background:#f8fafc}
+
+/* Reset button */
+.btn.reset-btn{background:#ef4444;color:white;border:0}
+.btn.reset-btn:hover{background:#dc2626}
+
+/* Start button */
+.btn.start{background:#019120;color:white;border:0}
+.btn.start:hover{background:#007a1b}
 
 @media (max-width:720px){
   .card{flex-direction:column}

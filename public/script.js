@@ -5,7 +5,7 @@ async function startGame() {
     document.getElementById("attempts").innerText = data.attempts;
 
     const attemptsContainer = document.getElementById('attemptsContainer');
-    if (attemptsContainer) attemptsContainer.classList.remove('hidden');
+    if (attemptsContainer) attemptsContainer.classList.remove('invisible');
 
         document.getElementById("result").innerText = "";
         window._hintsShown = [];
@@ -64,7 +64,18 @@ async function makeGuess() {
 
     if (isWin || isGameOver) {
         setControlsEnabled(false);
+        fetchStats();
     }
+}
+
+async function fetchStats() {
+    try {
+        const res = await fetch('/game/stats');
+        if (!res.ok) return;
+        const stats = await res.json();
+        const element = document.getElementById('stats');
+        if (element) element.textContent = `Wins: ${stats.wins || 0} - Losses: ${stats.losses || 0}`;
+    } catch (e) {}
 }
 
 function setControlsEnabled(enabled) {
@@ -77,8 +88,21 @@ function setControlsEnabled(enabled) {
 document.addEventListener('DOMContentLoaded', () => {
     setControlsEnabled(false);
     const attemptsContainer = document.getElementById('attemptsContainer');
-    if (attemptsContainer) attemptsContainer.classList.add('hidden');
+    if (attemptsContainer) attemptsContainer.classList.add('invisible');
     initAutocomplete();
+    fetchStats();
+
+    const resetBtn = document.getElementById('resetProgress');
+    if (resetBtn) resetBtn.addEventListener('click', async () => {
+        if (!confirm('Reset wins and losses to zero?')) return;
+        try {
+            const res = await fetch('/game/stats', { method: 'DELETE' });
+            if (!res.ok) return;
+            const stats = await res.json();
+            const el = document.getElementById('stats');
+            if (el) el.textContent = `Wins: ${stats.wins || 0} - Losses: ${stats.losses || 0}`;
+        } catch (e) {}
+    });
 });
 
 function escapeHTML(str) {
