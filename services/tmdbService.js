@@ -49,9 +49,11 @@ async function getRandomMovie(usedMovies) {
     const mainActor = credits.data.cast?.[0];
 
     return {
+        id: movie.id,
         title: movie.title,
         synopsis: details.data.overview,
-
+        poster_path: details.data.poster_path || null,
+        release_date: details.data.release_date || null,
         hints: [
             `Release Year: ${year}`,
             director ? `Director: ${director.name}` : "Director: Unknown",

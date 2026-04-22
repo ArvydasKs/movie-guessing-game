@@ -43,7 +43,14 @@ function makeGuess(req, res) {
         return res.json({
             message: `Congratulations!\nYou've guessed the movie "${gameState.movie.title}"!`,
             attempts: gameState.attempts,
-            stats
+            stats,
+            movie: {
+                id: gameState.movie.id,
+                title: gameState.movie.title,
+                year: gameState.movie.release_date ? gameState.movie.release_date.split('-')[0] : '',
+                poster_path: gameState.movie.poster_path || null,
+                tmdb_url: gameState.movie.id ? `https://www.themoviedb.org/movie/${gameState.movie.id}` : null
+            }
         });
     }
 
@@ -68,7 +75,14 @@ function makeGuess(req, res) {
         return res.json({
             message: `Game over!\nThe correct answer was "${gameState.movie.title}"`,
             attempts: 0,
-            hint: null
+            hint: null,
+            movie: {
+                id: gameState.movie.id,
+                title: gameState.movie.title,
+                year: gameState.movie.release_date ? gameState.movie.release_date.split('-')[0] : '',
+                poster_path: gameState.movie.poster_path || null,
+                tmdb_url: gameState.movie.id ? `https://www.themoviedb.org/movie/${gameState.movie.id}` : null
+            }
         });
     }
 

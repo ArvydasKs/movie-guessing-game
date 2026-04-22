@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const gameController = require('../controllers/gameController');
+const discoveryController = require('../controllers/discoveryController');
 const tmdbService = require('../services/tmdbService');
 
 router.get('/start', gameController.startGame);
@@ -27,9 +28,13 @@ router.get('/stats', (req, res) => {
 
 router.delete('/stats', (req, res) => {
     const stats = { wins: 0, losses: 0 };
-    // Set the stats cookie back to zeros (mirror startGame cookie options)
+
     res.cookie('stats', JSON.stringify(stats), { httpOnly: true, maxAge: 10*365*24*60*60*1000 });
     res.json(stats);
 });
+
+router.get('/discoveries', discoveryController.listDiscoveries);
+router.post('/discoveries', discoveryController.addDiscovery);
+router.delete('/discoveries/:id', discoveryController.removeDiscovery);
 
 module.exports = router;

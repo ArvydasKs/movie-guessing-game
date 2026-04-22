@@ -60,6 +60,16 @@ async function makeGuess() {
     if (isWin || isGameOver) {
         setControlsEnabled(false);
         fetchStats();
+
+        if (data.movie) {
+            window._lastMovie = data.movie;
+            const saveBtn = document.getElementById('saveDiscoveryBtn');
+            if (saveBtn) {
+                saveBtn.style.display = '';
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save to Discoveries';
+            }
+        }
     }
 }
 
@@ -98,6 +108,30 @@ document.addEventListener('DOMContentLoaded', () => {
             if (el) el.textContent = `Wins: ${stats.wins || 0} - Losses: ${stats.losses || 0}`;
         } catch (e) {}
     });
+
+    const saveBtn = document.getElementById('saveDiscoveryBtn');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', async () => {
+            if (!window._lastMovie) return alert('No movie to save.');
+            saveBtn.disabled = true;
+            try {
+                const res = await fetch('/game/discoveries', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(window._lastMovie)
+                });
+                if (res.status === 201) {
+                    saveBtn.textContent = 'Saved';
+                } else if (res.status === 409) {
+                    saveBtn.textContent = 'Already saved';
+                } else {
+                    saveBtn.textContent = 'Save failed';
+                }
+            } catch (e) {
+                saveBtn.textContent = 'Save failed';
+            }
+        });
+    }
 });
 
 function escapeHTML(str) {
