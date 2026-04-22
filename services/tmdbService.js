@@ -60,6 +60,29 @@ async function getRandomMovie(usedMovies) {
     };
 }
 
+async function searchMovies(query) {
+    if (!query || !query.trim()) return [];
+    try {
+        const res = await axios.get(`${BASE_URL}/search/movie`, {
+            params: {
+                api_key: API_KEY,
+                query,
+                include_adult: false,
+                page: 1
+            }
+        });
+
+        return (res.data.results || []).map(m => ({
+            id: m.id,
+            title: m.title,
+            year: m.release_date ? m.release_date.split('-')[0] : ''
+        }));
+    } catch (e) {
+        return [];
+    }
+}
+
 module.exports = {
-    getRandomMovie
+    getRandomMovie,
+    searchMovies
 };

@@ -26,7 +26,10 @@
         </div>
 
         <div class="controls">
-          <input id="guessInput" class="input" placeholder="Your guess..." disabled />
+          <div class="autocomplete">
+            <input id="guessInput" class="input" placeholder="Your guess..." disabled />
+            <div id="suggestions" class="suggestions hidden" aria-hidden="true"></div>
+          </div>
           <button id="guessBtn" class="btn primary" onclick="makeGuess()" disabled>Guess</button>
           <button class="btn secondary" onclick="startGame()">Start New Game</button>
         </div>

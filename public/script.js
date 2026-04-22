@@ -78,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setControlsEnabled(false);
     const attemptsContainer = document.getElementById('attemptsContainer');
     if (attemptsContainer) attemptsContainer.classList.add('hidden');
+    initAutocomplete();
 });
 
 function escapeHTML(str) {
@@ -88,4 +89,111 @@ function escapeHTML(str) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
+}
+
+function debounce(fn, wait) {
+    let t;
+    return (...args) => {
+        clearTimeout(t);
+        t = setTimeout(() => fn(...args), wait);
+    };
+}
+
+function initAutocomplete() {
+    const input = document.getElementById('guessInput');
+    const box = document.getElementById('suggestions');
+    if (!input || !box) return;
+
+    let items = [];
+    let active = -1;
+
+    const originalParent = box.parentElement;
+    const originalNext = box.nextSibling;
+
+    const render = () => {
+        console.log('autocomplete.render, items:', items.length, 'active:', active);
+        if (!items.length) {
+            box.classList.add('hidden');
+            box.innerHTML = '';
+            
+            if (box.parentElement !== originalParent) {
+                if (originalNext) originalParent.insertBefore(box, originalNext);
+                else originalParent.appendChild(box);
+                box.style.position = '';
+                box.style.left = '';
+                box.style.top = '';
+                box.style.width = '';
+                box.style.zIndex = '';
+            }
+            return;
+        }
+
+        box.classList.remove('hidden');
+        const header = `<div class="header"><span class="count">${items.length} Results:</span></div>`;
+        const list = items.map((it, i) => `\n            <div class="item${i===active? ' active' : ''}" data-index="${i}">` +
+            `${escapeHTML(it.title)}${it.year ? ' (' + escapeHTML(it.year) + ')' : ''}` +
+            `</div>`).join('');
+        box.innerHTML = header + `<div class="list">${list}</div>`;
+
+        try {
+            const r = input.getBoundingClientRect();
+            if (box.parentElement !== document.body) document.body.appendChild(box);
+            box.style.position = 'absolute';
+            box.style.left = (r.left + window.scrollX) + 'px';
+            box.style.top = (r.bottom + window.scrollY + 8) + 'px';
+            box.style.width = r.width + 'px';
+            box.style.zIndex = 9999;
+        } catch (e) {
+            console.warn('autocomplete: positioning failed', e);
+        }
+    };
+
+    const fetchSuggestions = debounce(async (q) => {
+        if (!q || q.length < 3) { items = []; render(); return; }
+        try {
+            const res = await fetch('/game/tmdb/search?q=' + encodeURIComponent(q));
+            let results = await res.json();
+
+            const max = Math.max(3, Math.min(10, 13 - q.length));
+            items = results.slice(0, max);
+            active = -1;
+            render();
+        } catch (e) { items = []; render(); }
+    }, 250);
+
+    input.addEventListener('input', (e) => {
+        fetchSuggestions(e.target.value.trim());
+    });
+
+    input.addEventListener('keydown', (e) => {
+        if (!items.length) return;
+        if (e.key === 'ArrowDown') { e.preventDefault(); active = Math.min(active + 1, items.length - 1); render(); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); active = Math.max(active - 1, 0); render(); }
+        else if (e.key === 'Enter') {
+            if (active >= 0 && items[active]) {
+                e.preventDefault(); select(items[active]);
+            }
+        }
+        else if (e.key === 'Escape') { items = []; render(); }
+    });
+
+    box.addEventListener('click', (e) => {
+        const el = e.target.closest('.item');
+        if (!el) return;
+        const idx = Number(el.dataset.index);
+        if (!Number.isNaN(idx) && items[idx]) select(items[idx]);
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('#suggestions') && e.target !== input) {
+            items = []; render();
+        }
+    });
+
+    function select(item) {
+        input.value = item.title;
+        items = [];
+        render();
+        input.focus();
+    }
 }

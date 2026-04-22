@@ -27,7 +27,20 @@ body{
 .status{display:flex;justify-content:flex-end}
 .attempts{background:#f3f4f6;padding:6px 10px;border-radius:8px;color:#111827;font-weight:600}
 .controls{display:flex;flex-direction:column;gap:8px}
+.controls .input,
+.controls .btn{
+  width:100%;
+}
 .input{padding:10px;border-radius:8px;border:1px solid #e5e7eb;font-size:14px}
+.autocomplete{position:relative}
+.suggestions{position:absolute;left:0;right:0;top:calc(100% + 8px);background:white;border:1px solid #e5e7eb;border-radius:8px;max-height:260px;overflow:auto;z-index:50;box-shadow:0 6px 18px rgba(2,6,23,0.2)}
+.suggestions.hidden{display:none}
+.suggestions .header{padding:6px 10px;background:#f1f5f9;border-bottom:1px solid #e6eef8;font-weight:700;color:#0b1220}
+.suggestions .list{max-height:220px;overflow:auto}
+.suggestions .item{padding:8px 10px;border-bottom:1px solid #f3f4f6;cursor:pointer}
+.suggestions .item:last-child{border-bottom:0}
+.suggestions .item:hover,.suggestions .item.active{background:#e6ffed}
+.suggestions .count{font-size:12px;color:#6b7280;margin-right:8px}
 .btn{padding:10px 12px;border-radius:8px;border:0;cursor:pointer;font-weight:600}
 .btn.primary{background:var(--accent);color:white}
 .btn.secondary{background:#eef2ff;color:#1f2937}
