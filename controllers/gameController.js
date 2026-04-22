@@ -31,10 +31,6 @@ function makeGuess(req, res) {
         return res.json({ message: "Game over! Please start a new game." });
     }
 
-    if (!userGuess || userGuess.trim() === "") {
-        return res.json({ message: "Empty guess is not allowed." });
-    }
-
     if (userGuess.toLowerCase() === gameState.movie.title.toLowerCase()) {
         gameState.gameOver = true;
 
@@ -45,7 +41,7 @@ function makeGuess(req, res) {
         res.cookie('stats', JSON.stringify(stats), { httpOnly: true, maxAge: 10*365*24*60*60*1000 });
 
         return res.json({
-            message: "Congratulations!\nYou've guessed the movie!",
+            message: `Congratulations!\nYou've guessed the movie "${gameState.movie.title}"!`,
             attempts: gameState.attempts,
             stats
         });

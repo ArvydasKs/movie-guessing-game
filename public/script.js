@@ -18,11 +18,6 @@ async function startGame() {
 async function makeGuess() {
     const guess = document.getElementById("guessInput").value.trim();
 
-    if (!guess) {
-        document.getElementById("result").innerText = "Please enter a guess.";
-        return;
-    }
-
     const res = await fetch("/game/guess", {
         method: "POST",
         headers: {
