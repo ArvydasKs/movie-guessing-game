@@ -13,6 +13,12 @@ async function startGame() {
 
     setControlsEnabled(true);
     document.getElementById("guessInput").focus();
+    const saveBtn = document.getElementById('saveDiscoveryBtn');
+    if (saveBtn) {
+        saveBtn.style.display = 'none';
+        saveBtn.disabled = true;
+    }
+    window._lastMovie = null;
 }
 
 async function makeGuess() {
