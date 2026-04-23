@@ -96,68 +96,6 @@ function setControlsEnabled(enabled) {
     if (guessBtn) guessBtn.disabled = !enabled;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    setControlsEnabled(false);
-    const attemptsContainer = document.getElementById('attemptsContainer');
-    if (attemptsContainer) attemptsContainer.classList.add('invisible');
-    initAutocomplete();
-    fetchStats();
-
-    const resetBtn = document.getElementById('resetProgress');
-    if (resetBtn) resetBtn.addEventListener('click', async () => {
-        if (!confirm('Reset wins and losses to zero?')) return;
-        try {
-            const res = await fetch('/game/stats', { method: 'DELETE' });
-            if (!res.ok) return;
-            const stats = await res.json();
-            const el = document.getElementById('stats');
-            if (el) el.textContent = `Wins: ${stats.wins || 0} - Losses: ${stats.losses || 0}`;
-        } catch (e) {}
-    });
-
-    const saveBtn = document.getElementById('saveDiscoveryBtn');
-    if (saveBtn) {
-        saveBtn.addEventListener('click', async () => {
-            if (!window._lastMovie) return alert('No movie to save.');
-            saveBtn.disabled = true;
-            try {
-                const res = await fetch('/game/discoveries', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(window._lastMovie)
-                });
-                if (res.status === 201) {
-                    saveBtn.textContent = 'Saved';
-                } else if (res.status === 409) {
-                    saveBtn.textContent = 'Already saved';
-                } else {
-                    saveBtn.textContent = 'Save failed';
-                }
-            } catch (e) {
-                saveBtn.textContent = 'Save failed';
-            }
-        });
-    }
-});
-
-function escapeHTML(str) {
-    if (!str) return '';
-    return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-}
-
-function debounce(fn, wait) {
-    let t;
-    return (...args) => {
-        clearTimeout(t);
-        t = setTimeout(() => fn(...args), wait);
-    };
-}
-
 function initAutocomplete() {
     const input = document.getElementById('guessInput');
     const box = document.getElementById('suggestions');
@@ -256,3 +194,47 @@ function initAutocomplete() {
         input.focus();
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    setControlsEnabled(false);
+    const attemptsContainer = document.getElementById('attemptsContainer');
+    if (attemptsContainer) attemptsContainer.classList.add('invisible');
+    initAutocomplete();
+    fetchStats();
+
+    const resetBtn = document.getElementById('resetProgress');
+    if (resetBtn) resetBtn.addEventListener('click', async () => {
+        if (!confirm('Reset wins and losses to zero?')) return;
+        try {
+            const res = await fetch('/game/stats', { method: 'DELETE' });
+            if (!res.ok) return;
+            const stats = await res.json();
+            const el = document.getElementById('stats');
+            if (el) el.textContent = `Wins: ${stats.wins || 0} - Losses: ${stats.losses || 0}`;
+        } catch (e) {}
+    });
+
+    const saveBtn = document.getElementById('saveDiscoveryBtn');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', async () => {
+            if (!window._lastMovie) return alert('No movie to save.');
+            saveBtn.disabled = true;
+            try {
+                const res = await fetch('/game/discoveries', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(window._lastMovie)
+                });
+                if (res.status === 201) {
+                    saveBtn.textContent = 'Saved';
+                } else if (res.status === 409) {
+                    saveBtn.textContent = 'Already saved';
+                } else {
+                    saveBtn.textContent = 'Save failed';
+                }
+            } catch (e) {
+                saveBtn.textContent = 'Save failed';
+            }
+        });
+    }
+});
