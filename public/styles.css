@@ -52,7 +52,7 @@ body{
 .invisible{visibility:hidden}
 .footer{text-align:center;margin-top:12px;color:#cbd5e1}
 
-.reset-btn{position:absolute;left:20px;bottom:20px;z-index:1200;padding:10px 12px;border-radius:8px}
+.reset-btn{padding:10px 12px;border-radius:8px;margin-top:8px}
 .btn.tertiary{background:#fff;color:#1f2937;border:1px solid #e5e7eb}
 .btn.tertiary:hover{background:#f8fafc}
 
