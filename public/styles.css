@@ -88,3 +88,38 @@ body{
   .discovery-item{padding:10px}
   .discovery-item img{width:76px}
 }
+
+/* Responsive enhancements: desktop, tablet, mobile refinements */
+@media (min-width:1200px){
+  .container{max-width:1140px}
+  .title{font-size:32px}
+  .card{padding:28px;gap:32px}
+  .discovery-item img{width:110px}
+}
+
+@media (max-width:1024px){
+  .container{padding:0 20px}
+  .card{gap:16px}
+  .left{flex:1}
+  .right{flex:1;gap:10px}
+  .discoveries{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+  .discovery-item img{width:92px}
+  .title{font-size:26px}
+}
+
+@media (max-width:720px){
+  .title{font-size:22px}
+  .card{padding:16px}
+  .discoveries{gap:12px}
+  .discovery-item img{width:84px}
+  .subtitle{font-size:13px}
+}
+
+@media (max-width:480px){
+  body{padding:16px}
+  .title{font-size:20px}
+  .card{padding:12px}
+  .section-title{font-size:14px}
+  .controls .input,.controls .btn{font-size:14px}
+  .discovery-item img{width:72px}
+}
