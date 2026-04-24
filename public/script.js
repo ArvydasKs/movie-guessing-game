@@ -63,6 +63,9 @@ async function makeGuess() {
     const isWin = msg.includes("congratulations");
     const isGameOver = msg.startsWith("game over") || data.attempts === 0;
 
+    const inputEl = document.getElementById("guessInput");
+    if (inputEl) inputEl.value = "";
+
     if (isWin || isGameOver) {
         setControlsEnabled(false);
         fetchStats();
